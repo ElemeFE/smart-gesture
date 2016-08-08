@@ -54,7 +54,7 @@ module.exports = {
     // new webpack.NoErrorsPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: './dist/index.html',
+      template: 'index.html',
       inject: true,
     }),
     new webpack.optimize.UglifyJsPlugin({
