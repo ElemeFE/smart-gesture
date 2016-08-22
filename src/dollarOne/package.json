@@ -1,0 +1,5 @@
+{
+  "name":"dollarOne",
+  "version": "0.0.1",
+  "main": "./dollar.js"
+}

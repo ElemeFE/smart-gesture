@@ -3,18 +3,12 @@ import 'normalize.css';
 import './src/css/main.scss';
 
 const options = {
-  onLeft: () => {
-    alert('left');
+  onSwipe: (list) => {
+    console.log(list);
   },
-  onRight: () => {
-    alert('right');
-  },
-  onUp: () => {
-    alert('up');
-  },
-  onDown: () => {
-    alert('down');
-  },
+  onGesture: (res, points) => {
+    console.log(res, points);
+  }
 };
 
 createCanvas(options);
