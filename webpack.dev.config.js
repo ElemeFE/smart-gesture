@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    index: [path.resolve(__dirname, './index.js'), 'webpack-hot-middleware/client?reload=true'],
+    index: [path.resolve(__dirname, './demo/index.js'), 'webpack-hot-middleware/client?reload=true'],
   },
 
   output: {
@@ -56,7 +56,7 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'index.html',
+      template: './demo/index.html',
     }),
   ],
 };

@@ -28,6 +28,7 @@ class Canvas {
       this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       this.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       this.path.id = 'path';
+      this.svg.setAttribute('style', 'position: fixed; top: 0; left: 0;');
       this.svg.setAttribute('width', '100%');
       this.svg.setAttribute('height', '100%');
       this.svg.setAttribute('stroke', '#000');
@@ -40,6 +41,8 @@ class Canvas {
         x: event.pageX,
         y: event.pageY,
       };
+      this.path.setAttribute('stroke', '#666');
+      this.path.setAttribute('stroke-width', 4);
       this.path.setAttribute('d', `M ${event.pageX} ${event.pageY}`);
       this.isMove = true;
     });
