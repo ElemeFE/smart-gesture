@@ -21,7 +21,7 @@ class Canvas {
     this.onGesture = options.onGesture || emptyFunc;
     this.path = document.getElementById('path');
 
-    this._initUnistrokes(options.unistrokes || gesture);
+    this._initUnistrokes(options.gestures || gesture);
 
     window.addEventListener('contextmenu', () => {
       event.preventDefault();
