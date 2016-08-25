@@ -16,9 +16,41 @@
 
 #### options
 
+##### el
+应用手势识别的元素
+- type: DOMElement
+- 默认值: body
+
+##### enablePath
+是否显示鼠标轨迹
+- type: Bool
+- 默认值: true
+
+##### lineColor
+鼠标轨迹的颜色
+- type: String
+- 默认值: '#666'
+
+##### lineWidth
+鼠标轨迹的宽度
+- type: Number
+- 默认值: 4
+
+##### timeDelay
+长按一定时间后才会触发手势识别
+- type: Number
+- 默认值: 600(ms)
+
+##### triggerMouseKey
+触发手势识别的鼠标按键
+- type: String
+- 默认值: 'right'
+- 可选值: 'left', 'right'
+
 ##### gestures
 初始化自定义图形集合
 - type: Array | Object
+- 默认值: 所有预设的手势
 
 #### events
 
