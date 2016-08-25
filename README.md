@@ -10,9 +10,35 @@
 
 #### 自定义图形手势
 
-可识别任意的可以一笔画出的手势
+可识别任意的可以一笔画出的手势,默认有预设的14种图形,同时也能自定义图形。若自定义图形手势,可以通过增加样本集来提高识别率,推荐同一个手势对应2-3个样本集。
 
 ![smart-gesture](images/smart-gesture.gif)
+
+#### 调用方法
+
+```
+// 这是一个简陋的例子。待发布到npm后可以直接 import createCanvas from 'smart-gesture';
+import createCanvas from '../src/main.js';
+
+let lastPoints = [];
+
+const options = {
+  el: document.getElementById('test'),  
+  enablePath: true,                     
+  timeDelay: 500,                        
+  onSwipe: (list) => {
+    document.getElementById('result0').innerHTML = list.join('');
+    console.log(list);
+  },
+  onGesture: (res, points) => {
+    console.log(res);
+    document.getElementById('result').innerHTML = res.score > 2 ? res.name : '未识别';
+    lastPoints = points;
+  }
+};
+
+const canvas = createCanvas(options);
+```
 
 #### options
 
