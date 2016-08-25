@@ -5,6 +5,19 @@ const DO = new DollarRecognizer();
 const emptyFunc = () => {};
 class Canvas {
   constructor(options = {}) {
+    this.options = {
+      el: document.body,
+      onSwipe: emptyFunc,
+      onGesture: emptyFunc,
+      gestures: gesture,
+      enablePath: true,
+      lineColor: '#666',
+      lineWidth: 4,
+      timeDelay: 600,
+      triggerMouseKey: 'right',
+      ...options,
+    };
+    this.enable = true;
     this.path = null;
     this.startPos = null;
     this.endPos = null;
@@ -13,63 +26,44 @@ class Canvas {
     this.points = [];
     this.isMove = false;
     this.Unistrokes = [];
-    // this.onLeft = options.onLeft || emptyFunc;
-    // this.onRight = options.onRight || emptyFunc;
-    // this.onUp = options.onUp || emptyFunc;
-    // this.onDown = options.onDown || emptyFunc;
-    this.onSwipe = options.onSwipe || emptyFunc;
-    this.onGesture = options.onGesture || emptyFunc;
+
     this.path = document.getElementById('path');
 
     this._initUnistrokes(options.gestures || gesture);
 
-    window.addEventListener('contextmenu', () => {
-      event.preventDefault();
-      this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      this.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      this.path.id = 'path';
-      this.svg.setAttribute('style', 'position: fixed; top: 0; left: 0;');
-      this.svg.setAttribute('width', '100%');
-      this.svg.setAttribute('height', '100%');
-      this.svg.setAttribute('stroke', '#000');
-      this.svg.setAttribute('fill', 'none');
-      this.svg.appendChild(this.path);
-      document.body.appendChild(this.svg);
+    this._mouseDelayTimer = null;
 
-      this.points = [];
-      this.startPos = {
-        x: event.pageX,
-        y: event.pageY,
-      };
-      this.path.setAttribute('stroke', '#666');
-      this.path.setAttribute('stroke-width', 4);
-      this.path.setAttribute('d', `M ${event.pageX} ${event.pageY}`);
-      this.isMove = true;
-    });
+    this.options.el.addEventListener('mousedown', this._moveStart.bind(this));
 
-    window.addEventListener('mousemove', this.move.bind(this));
+    this.options.el.addEventListener('mousemove', this._move.bind(this));
 
-    window.addEventListener('mouseup', () => {
-      if (!this.isMove) return;
-      // if (Math.abs(this.endPos.x - this.startPos.x) > Math.abs(this.endPos.y - this.startPos.y)) {
-      //   this.direction = this.endPos.x - this.startPos.x > 0 ? 'Right' : 'Left';
-      // } else {
-      //   this.direction = this.endPos.y - this.startPos.y > 0 ? 'Down' : 'Up';
-      // }
-      if (this.directionList.length > 0) {
-        this.onSwipe(this.directionList);
+    this.options.el.addEventListener('mouseup', this._moveEnd.bind(this));
+    this.options.el.addEventListener('mouseleave', this._moveEnd.bind(this));
+
+    this.options.el.addEventListener('contextmenu', () => {
+      if (this.enable && this.options.triggerMouseKey !== 'left') {
+        event.preventDefault();
       }
-      if (this.points.length > 10) {
-        const res = DO.recognize(this.points, this.Unistrokes, true);
-        this.onGesture(res, this.points);
-      }
-
-      document.body.removeChild(this.svg);
-      this.isMove = false;
-      this.endPos = null;
-      this.directionList = [];
-      this.points = [];
     });
+  }
+
+  _addPath(startPoint) {
+    this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    this.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    this.path.id = 'path';
+    this.svg.setAttribute('style', 'position: absolute; top: 0; left: 0; background: rgba(0,0,0,.05)');
+    this.svg.setAttribute('width', '100%');
+    this.svg.setAttribute('height', '100%');
+    this.svg.setAttribute('fill', 'none');
+
+    this.points = [];
+    this.startPos = startPoint;
+    this.path.setAttribute('stroke', this.options.lineColor);
+    this.path.setAttribute('stroke-width', this.options.lineWidth);
+    this.path.setAttribute('d', `M ${startPoint.x} ${startPoint.y}`);
+
+    this.svg.appendChild(this.path);
+    this.options.el.appendChild(this.svg);
   }
 
   _initUnistrokes(gestures) {
@@ -81,48 +75,82 @@ class Canvas {
     }
   }
 
-  addGesture(ges = {}) {
-    const { name, points } = ges;
-    if (!name || !points || !Array.isArray(points)) {
-      console.warn('invalid params. addGesture fail.');
-      return false;
+  _moveStart() {
+    if (!this.enable) return;
+
+    if (this.options.triggerMouseKey === 'left') {
+      if (event.button !== 0) return;
+    } else {
+      if (event.button !== 2) return;
     }
 
-    const unistroke = new Unistroke(name, points);
-    this.Unistrokes.push(unistroke);
+    const startPoint = {
+      x: event.pageX - this.options.el.offsetLeft,
+      y: event.pageY - this.options.el.offsetTop,
+    };
+    this._mouseDelayTimer = setTimeout(() => {
+      if (this.options.enablePath) {
+        this._addPath(startPoint);
+      }
+
+      this.isMove = true;
+    }, this.options.timeDelay);
   }
 
-  move() {
-    if (!this.isMove) return;
+  _move() {
+    if (!this.isMove) {
+      clearTimeout(this._mouseDelayTimer);
+      return;
+    }
+
+    event.preventDefault();
     this._progressSwipe(event);
-    // this.endPos = {
-    //   x: event.pageX,
-    //   y: event.pageY,
-    // };
-    // const d = this.path.getAttribute('d');
-    // this.points.push({ x: event.pageX, y: event.pageY });
-    // this.path.setAttribute('d', `${d} L ${event.pageX} ${event.pageY}`);
+  }
+
+  _moveEnd() {
+    if (!this.isMove) {
+      clearTimeout(this._mouseDelayTimer);
+      return;
+    }
+
+    if (this.directionList.length > 0) {
+      this.options.onSwipe(this.directionList);
+    }
+    if (this.points.length > 10) {
+      const res = DO.recognize(this.points, this.Unistrokes, true);
+      this.options.onGesture(res, this.points);
+    }
+
+    if (this.options.enablePath) {
+      this.options.el.removeChild(this.svg);
+    }
+    this.isMove = false;
+    this.endPos = null;
+    this.directionList = [];
+    this.points = [];
   }
 
   _progressSwipe(e) {
     if (!this.endPos) {
       this.endPos = {
-        x: e.pageX,
-        y: e.pageY,
+        x: e.pageX - this.options.el.offsetLeft,
+        y: e.pageY - this.options.el.offsetTop,
       };
       return;
     }
 
-    const x = e.pageX;
-    const y = e.pageY;
+    const x = e.pageX - this.options.el.offsetLeft;
+    const y = e.pageY - this.options.el.offsetTop;
     const dx = Math.abs(x - this.endPos.x);
     const dy = Math.abs(y - this.endPos.y);
 
     if (dx > 5 || dy > 5) {
-      // draw the point
-      const d = this.path.getAttribute('d');
       this.points.push({ x, y });
-      this.path.setAttribute('d', `${d} L ${event.pageX} ${event.pageY}`);
+      // draw the point
+      if (this.options.enablePath) {
+        const d = this.path.getAttribute('d');
+        this.path.setAttribute('d', `${d} L ${x} ${y}`);
+      }
 
       if (dx > 20 || dy > 20) {
         let direction;
@@ -140,6 +168,21 @@ class Canvas {
         this.endPos = { x, y };
       }
     }
+  }
+
+  addGesture(ges = {}) {
+    const { name, points } = ges;
+    if (!name || !points || !Array.isArray(points)) {
+      console.warn('invalid params. addGesture fail.');
+      return false;
+    }
+
+    const unistroke = new Unistroke(name, points);
+    this.Unistrokes.push(unistroke);
+  }
+
+  setEnable(b = true) {
+    this.enable = b;
   }
 }
 

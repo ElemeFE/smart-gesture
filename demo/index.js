@@ -5,8 +5,11 @@ import '../src/css/main.scss';
 let lastPoints = [];
 
 const options = {
+  el: document.getElementById('test'),
+  enablePath: true,
+  timeDelay: 500,
   onSwipe: (list) => {
-    // document.getElementById('result').innerHTML = list.join('');
+    document.getElementById('result0').innerHTML = list.join('');
     console.log(list);
   },
   onGesture: (res, points) => {
@@ -17,6 +20,7 @@ const options = {
 };
 
 const canvas = createCanvas(options);
+window.haha = canvas;
 
 document.getElementById('btn').addEventListener('click', () => {
   canvas.addGesture({
