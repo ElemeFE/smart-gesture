@@ -188,4 +188,4 @@ class Canvas {
 
 const smartGesture = (options) => new Canvas(options);
 
-export default smartGesture;
+module.exports = smartGesture;
