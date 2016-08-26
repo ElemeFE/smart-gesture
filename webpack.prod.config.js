@@ -5,14 +5,13 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = [{
   entry: {
-    index: [path.resolve(__dirname, 'src/index.js')],
+    'smart-gesture': [path.resolve(__dirname, 'src/index.js')],
   },
 
   output: {
     path: path.resolve(__dirname, './dist/min'),
-    filename: '[name].js',
+    filename: '[name].min.js',
     publicPath: '/',
-    chunkFilename: '[name].js',
     libraryTarget: 'umd',
     library: 'smartGesture',
     umdNamedDefine: true
