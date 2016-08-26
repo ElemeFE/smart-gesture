@@ -17,8 +17,7 @@
 #### 调用方法
 
 ```
-// 这是一个简陋的例子。待发布到npm后可以直接 import createCanvas from 'smart-gesture';
-import createCanvas from '../src/main.js';
+import smartGesture from 'smart-gesture';
 
 let lastPoints = [];
 

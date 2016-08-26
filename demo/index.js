@@ -1,4 +1,4 @@
-import createCanvas from '../src/main.js';
+import smartGesture from '../dist/index.js';
 import 'normalize.css';
 import '../src/css/main.scss';
 
@@ -19,8 +19,7 @@ const options = {
   }
 };
 
-const canvas = createCanvas(options);
-window.haha = canvas;
+const canvas = smartGesture(options);
 
 document.getElementById('btn').addEventListener('click', () => {
   canvas.addGesture({
