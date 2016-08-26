@@ -14,7 +14,9 @@
 
 ![smart-gesture](images/smart-gesture.gif)
 
-#### 调用方法
+#### 使用方法
+
+`npm install --save smart-gesture`
 
 ```
 import smartGesture from 'smart-gesture';
