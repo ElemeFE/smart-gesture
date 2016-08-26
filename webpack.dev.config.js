@@ -21,17 +21,13 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          plugins: ['transform-runtime', 'transform-decorators-legacy'],
-          presets: ['es2015', 'stage-0', 'react'],
+          plugins: ['transform-runtime'],
+          presets: ['es2015', 'stage-0'],
         },
       },
       {
         test: /\.(scss|css)$/,
         loader: 'style-loader!css-loader!postcss-loader!sass-loader',
-      },
-      {
-        test: /\.(jpg|png|svg|gif|eot|ttf|woff)$/,
-        loader: 'url-loader?limit=8000!file-loader',
       },
     ],
   },
@@ -44,10 +40,16 @@ module.exports = {
     color: true,
   },
 
+
+  resolve: {
+    alias: {
+      'smart-gesture/lib/dollarOne': path.join(__dirname, './dist/lib/dollarOne.js')
+    }
+  },
+
   devtool: 'source-map',
 
   plugins: [
-    // Webpack 1.0
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),
     }),

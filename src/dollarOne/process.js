@@ -9,7 +9,6 @@ import {
 const Phi = 0.5 * (-1.0 + Math.sqrt(5.0)); // Golden Ratio
 
 
-// Step1 resample a points path into n evenly spaced points
 const resample = (points, n) => {
   let I = pathLength(points) / (n - 1);
   let D = 0;
@@ -33,8 +32,6 @@ const resample = (points, n) => {
   return newPoints;
 };
 
-// step2 rotate points so that their indicative angle is at 0°.
-// RotateToZero
 const rotateBy = (points, radians) => {
   // rotates points around centroid
   let c = centroid(points);
@@ -49,14 +46,6 @@ const rotateBy = (points, radians) => {
   return newPoints;
 };
 
-// step 3. Scale points so that the resulting bounding box will be of
-// size2
-// dimension; then translate points to the origin. BOUNDINGBOX
-// returns a rectangle according to (minx, miny), (maxx, maxy).
-//   For gestures serving as templates, Steps 1-3 should be carried out
-// once on the raw input points. For candidates, Steps 1-4 should be
-// used just after the candidate is articulated.
-// ScaleToSquare
 const scaleTo = (points, size) => {
   // non-uniform scale; assumes 2D gestures (i.e., no lines)
   let B = boundingBox(points);

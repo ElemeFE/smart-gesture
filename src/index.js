@@ -1,4 +1,4 @@
-import { Unistroke, DollarRecognizer } from './dollarOne';
+import { Unistroke, DollarRecognizer } from 'dollarOne';
 import * as gesture from './dollarOne/gestures';
 
 const DO = new DollarRecognizer();
@@ -186,6 +186,6 @@ class Canvas {
   }
 }
 
-const createCanvas = (options) => new Canvas(options);
+const smartGesture = (options) => new Canvas(options);
 
-export default createCanvas;
+export default smartGesture;
