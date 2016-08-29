@@ -15,6 +15,7 @@ class Canvas {
       lineWidth: 4,
       timeDelay: 600,
       triggerMouseKey: 'right',
+      activeColor: 'rgba(0, 0, 0, .05)',
       ...options,
     };
     this.enable = true;
@@ -33,25 +34,23 @@ class Canvas {
 
     this._mouseDelayTimer = null;
 
-    this.options.el.addEventListener('mousedown', this._moveStart.bind(this));
+    this._moveStart = this._moveStart.bind(this);
+    this._move = this._move.bind(this);
+    this._moveEnd = this._moveEnd.bind(this);
+    this._contextmenu = this._contextmenu.bind(this);
 
-    this.options.el.addEventListener('mousemove', this._move.bind(this));
-
-    this.options.el.addEventListener('mouseup', this._moveEnd.bind(this));
-    this.options.el.addEventListener('mouseleave', this._moveEnd.bind(this));
-
-    this.options.el.addEventListener('contextmenu', () => {
-      if (this.enable && this.options.triggerMouseKey !== 'left') {
-        event.preventDefault();
-      }
-    });
+    this.options.el.addEventListener('mousedown', this._moveStart);
+    this.options.el.addEventListener('mousemove', this._move);
+    this.options.el.addEventListener('mouseup', this._moveEnd);
+    this.options.el.addEventListener('mouseleave', this._moveEnd);
+    this.options.el.addEventListener('contextmenu', this._contextmenu);
   }
 
   _addPath(startPoint) {
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     this.path.id = 'path';
-    this.svg.setAttribute('style', 'position: absolute; top: 0; left: 0; background: rgba(0,0,0,.05)');
+    this.svg.setAttribute('style', `position: absolute; top: 0; left: 0; background: ${this.options.activeColor}`);
     this.svg.setAttribute('width', '100%');
     this.svg.setAttribute('height', '100%');
     this.svg.setAttribute('fill', 'none');
@@ -130,6 +129,12 @@ class Canvas {
     this.points = [];
   }
 
+  _contextmenu() {
+    if (this.enable && this.options.triggerMouseKey !== 'left') {
+      event.preventDefault();
+    }
+  }
+
   _progressSwipe(e) {
     if (!this.endPos) {
       this.endPos = {
@@ -184,6 +189,19 @@ class Canvas {
   setEnable(b = true) {
     this.enable = b;
   }
+
+  destroy() {
+    this.options.el.removeEventListener('mousedown', this._moveStart);
+    this.options.el.removeEventListener('mousemove', this._move);
+    this.options.el.removeEventListener('mouseup', this._moveEnd);
+    this.options.el.removeEventListener('mouseleave', this._moveEnd);
+    this.options.el.removeEventListener('contextmenu', this._contextmenu);
+  }
+
+  refresh(options = {}) {
+    this.options = { ...this.options, ...options }
+  }
+
 }
 
 const smartGesture = (options) => new Canvas(options);
