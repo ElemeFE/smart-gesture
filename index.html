@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Gesture DEMO</title>
+</head>
+<body>
+  <label>添加新手势 </label>
+  <input id="gestureName" placeholder="手势名称">
+  <button id="btn">ADD</button>
+  <div id="test" style="height: 500px; background: #ddd; position: relative; margin: 10px 50px;"></div>
+  <h1 id="result" style="font-size: 80px; margin-top: 50px; color: #999; text-align: center"></h1>
+  <h1 id="result0" style="font-size: 80px; margin-top: 50px; color: #999; text-align: center"></h1>
+  <script src="dist/min/smart-gesture.min.js"></script>
+  <script>
+    let lastPoints = [];
+  
+    const options = {
+      el: document.getElementById('test'),
+      enablePath: true,
+      timeDelay: 500,
+      onSwipe: (list) => {
+        document.getElementById('result0').innerHTML = list.join('');
+        console.log(list);
+      },
+      onGesture: (res, points) => {
+        console.log(res);
+        document.getElementById('result').innerHTML = res.score > 2 ? res.name : '未识别';
+        lastPoints = points;
+      }
+    };
+  
+    const canvas = smartGesture(options);
+  
+    document.getElementById('btn').addEventListener('click', () => {
+      canvas.addGesture({
+        name: document.getElementById('gestureName').value,
+        points: lastPoints
+      });
+      document.getElementById('gestureName').value = '';
+    });
+
+  </script>
+</body>
+</html>
