@@ -1,6 +1,6 @@
 ## smart-gesture
 
-这是一个web版的鼠标手势组件，支持普通的鼠标手势和自定义图形手势
+这是一个web版的鼠标手势组件，支持普通的鼠标手势和自定义图形手势, 在线 [demo](https://elemefe.github.io/smart-gesture/)
 
 #### 普通鼠标手势
 
