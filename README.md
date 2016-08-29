@@ -84,7 +84,7 @@ var gesture = new smartGesture({el: document.querySelector('#target'), ...});
 
 - `triggerMouseKey` 触发手势识别的鼠标按键,类型为`String`,可选值`left | right`。(default: `right`)
 
-- `gestures` 初始化自定义图形集合。类型为`Array | Object`,若不想使用预设的手势,可以穿空数组。(default: [所有预设的手势])
+- `gestures` 初始化自定义图形集合。类型为`Array | Object`,若不想使用预设的手势,可以传空数组。(default: [所有预设的手势])
 
 - `activeColor` 开启手势时背景色。类型为`String`。(default: `rgba(0, 0, 0, .05)`)
 
