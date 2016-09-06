@@ -20,9 +20,12 @@ npm install --save smart-gesture
 
 ## 自定义图形手势
 
-可识别任意的可以一笔画出的手势,默认有预设的14种图形,同时也能自定义图形。若自定义图形手势,可以通过增加样本集来提高识别率,推荐同一个手势对应2-3个样本集。
+可识别任意的可以一笔画出的手势,默认有预设的4种图形,同时也能自定义图形。若自定义图形手势,可以通过增加样本集来提高识别率,推荐同一个手势对应2-3个样本集。
 
 ![smart-gesture](images/smart-gesture.gif)
+
+## 预设图形图案
+![demo](images/demo.png)
 
 ## Usage
 
@@ -87,6 +90,8 @@ var gesture = new smartGesture({el: document.querySelector('#target'), ...});
 - `gestures` 初始化自定义图形集合。类型为`Array | Object`,若不想使用预设的手势,可以传空数组。(default: [所有预设的手势])
 
 - `activeColor` 开启手势时背景色。类型为`String`。(default: `rgba(0, 0, 0, .05)`)
+
+- `eventType` 响应事件的类型。类型为`String`,可选值`touch | mouse`,当指定为`touch`时将捕获`touch`相关的事件,简单的说如果用于移动端请将参数设置为`touch`。(default: `mouse`)
 
 - `onSwipe: function(directionList)` 手势结束时调用, 
 
