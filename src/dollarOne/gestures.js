@@ -196,14 +196,6 @@ const Caret = {
   }]
 };
 
-// const ZigZag = {
-//   name: "zig-zag",
-//   points: [{ x: 307, y: 216 }, { x: 333, y: 186 }, { x: 356, y: 215 }, { x: 375, y: 186 }, { x: 399, y: 216 }, {
-//     x: 418,
-//     y: 186
-//   }]
-// };
-
 const Arrow = {
   name: "arrow",
   points: [{ x: 68, y: 222 }, { x: 70, y: 220 }, { x: 73, y: 218 }, { x: 75, y: 217 }, { x: 77, y: 215 }, {
@@ -530,19 +522,18 @@ const Pigtail = {
 
 export {
   Triangle,
-  X,
+  // X,
   Rectangle,
   Circle,
   Check,
-  Caret,
-  Pigtail,
-  Star,
-  RightCurlyBrace,
-  LeftCurlyBrace,
-  Delete,
-  V,
-  RightSquareBracket,
-  LeftSquareBracket,
-  Arrow,
-  // ZigZag,
+  // Caret,
+  // Pigtail,
+  // Star,
+  // RightCurlyBrace,
+  // LeftCurlyBrace,
+  // Delete,
+  // V,
+  // RightSquareBracket,
+  // LeftSquareBracket,
+  // Arrow,
 }

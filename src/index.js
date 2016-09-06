@@ -3,6 +3,7 @@ import * as gesture from './dollarOne/gestures';
 
 const DO = new DollarRecognizer();
 const emptyFunc = () => {};
+const svgPathId = 'elemefe_still_hiring_you_can_send_email_to_(yong.xiang@ele.me)';
 class Canvas {
   constructor(options = {}) {
     this.options = {
@@ -16,6 +17,7 @@ class Canvas {
       timeDelay: 600,
       triggerMouseKey: 'right',
       activeColor: 'rgba(0, 0, 0, .05)',
+      eventType: 'mouse',
       ...options,
     };
     this.enable = true;
@@ -28,7 +30,7 @@ class Canvas {
     this.isMove = false;
     this.Unistrokes = [];
 
-    this.path = document.getElementById('path');
+    this.path = document.getElementById(svgPathId);
 
     this._initUnistrokes(options.gestures || gesture);
 
@@ -39,24 +41,34 @@ class Canvas {
     this._moveEnd = this._moveEnd.bind(this);
     this._contextmenu = this._contextmenu.bind(this);
 
-    this.options.el.addEventListener('mousedown', this._moveStart);
-    this.options.el.addEventListener('mousemove', this._move);
-    this.options.el.addEventListener('mouseup', this._moveEnd);
-    this.options.el.addEventListener('mouseleave', this._moveEnd);
+    this.pointerStart = 'mousedown';
+    this.pointerMove = 'mousemove';
+    this.pointerUp = 'mouseup';
+    this.pointerLeave = 'mouseleave';
+    if (this.options.eventType === 'touch') {
+      this.pointerStart = 'touchstart';
+      this.pointerMove = 'touchmove';
+      this.pointerUp = 'touchend';
+      this.pointerLeave = 'touchcancel';
+    }
+    this.options.el.addEventListener(this.pointerStart, this._moveStart);
+    this.options.el.addEventListener(this.pointerMove, this._move);
+    this.options.el.addEventListener(this.pointerUp, this._moveEnd);
+    this.options.el.addEventListener(this.pointerLeave, this._moveEnd);
     this.options.el.addEventListener('contextmenu', this._contextmenu);
   }
 
   _addPath(startPoint) {
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    this.path.id = 'path';
+    this.path.id = svgPathId;
     this.svg.setAttribute('style', `position: absolute; top: 0; left: 0; background: ${this.options.activeColor}`);
     this.svg.setAttribute('width', '100%');
     this.svg.setAttribute('height', '100%');
     this.svg.setAttribute('fill', 'none');
 
     this.points = [];
-    this.startPos = startPoint;
+    // this.startPos = startPoint;
     this.path.setAttribute('stroke', this.options.lineColor);
     this.path.setAttribute('stroke-width', this.options.lineWidth);
     this.path.setAttribute('d', `M ${startPoint.x} ${startPoint.y}`);
@@ -74,19 +86,35 @@ class Canvas {
     }
   }
 
-  _moveStart() {
-    if (!this.enable) return;
-
-    if (this.options.triggerMouseKey === 'left') {
-      if (event.button !== 0) return;
-    } else {
-      if (event.button !== 2) return;
-    }
-
-    const startPoint = {
+  _handleMouseStart() {
+    return {
       x: event.pageX - this.options.el.offsetLeft,
       y: event.pageY - this.options.el.offsetTop,
     };
+  }
+
+  _handleTouchStart() {
+    return {
+      x: event.touches[0].pageX - this.options.el.offsetLeft,
+      y: event.touches[0].pageY - this.options.el.offsetTop,
+    };
+  }
+
+  _moveStart() {
+    if (!this.enable) return;
+
+    let startPoint;
+    if (this.options.eventType === 'touch') {
+      startPoint = this._handleTouchStart();
+    } else {
+      if (this.options.triggerMouseKey === 'left') {
+        if (event.button !== 0) return;
+      } else {
+        if (event.button !== 2) return;
+      }
+      startPoint = this._handleMouseStart();
+    }
+
     this._mouseDelayTimer = setTimeout(() => {
       if (this.options.enablePath) {
         this._addPath(startPoint);
@@ -136,16 +164,18 @@ class Canvas {
   }
 
   _progressSwipe(e) {
+    const pageX = this.options.eventType === 'touch' ? e.changedTouches[0].pageX : e.pageX;
+    const pageY = this.options.eventType === 'touch' ? e.changedTouches[0].pageY : e.pageY;
     if (!this.endPos) {
       this.endPos = {
-        x: e.pageX - this.options.el.offsetLeft,
-        y: e.pageY - this.options.el.offsetTop,
+        x: pageX - this.options.el.offsetLeft,
+        y: pageY - this.options.el.offsetTop,
       };
       return;
     }
 
-    const x = e.pageX - this.options.el.offsetLeft;
-    const y = e.pageY - this.options.el.offsetTop;
+    const x = pageX - this.options.el.offsetLeft;
+    const y = pageY - this.options.el.offsetTop;
     const dx = Math.abs(x - this.endPos.x);
     const dy = Math.abs(y - this.endPos.y);
 
@@ -191,10 +221,10 @@ class Canvas {
   }
 
   destroy() {
-    this.options.el.removeEventListener('mousedown', this._moveStart);
-    this.options.el.removeEventListener('mousemove', this._move);
-    this.options.el.removeEventListener('mouseup', this._moveEnd);
-    this.options.el.removeEventListener('mouseleave', this._moveEnd);
+    this.options.el.removeEventListener(this.pointerStart, this._moveStart);
+    this.options.el.removeEventListener(this.pointerMove, this._move);
+    this.options.el.removeEventListener(this.pointerUp, this._moveEnd);
+    this.options.el.removeEventListener(this.pointerLeave, this._moveEnd);
     this.options.el.removeEventListener('contextmenu', this._contextmenu);
   }
 
