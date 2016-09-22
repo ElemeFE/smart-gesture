@@ -93,7 +93,7 @@ var gesture = new smartGesture({el: document.querySelector('#target'), ...});
 
 - `eventType` 响应事件的类型。类型为`String`,可选值`touch | mouse`,当指定为`touch`时将捕获`touch`相关的事件,简单的说如果用于移动端请将参数设置为`touch`。(default: `mouse`)
 
-- `onSwipe: function(directionList)` 手势结束时调用, 
+- `onSwipe: function(directionList)` 手势结束时调用,
 
     - `directionList`: 普通手势的识别结果,数组。
 
@@ -101,7 +101,7 @@ var gesture = new smartGesture({el: document.querySelector('#target'), ...});
 - `onGesture: function(result, points)` 手势结束时调用
 
     - `result`: 自定义图形手势的识别结果,值为一个对象,包含`name`和`score`两个key。
-    
+
     - `points`: 包含该次手势的轨迹的点的集合构成的数组。可以配合`addGesture`方法来实现自定义手势功能。
 
 
@@ -125,6 +125,10 @@ var gesture = new smartGesture({el: document.querySelector('#target'), ...});
 npm i
 npm run dev
 ```
+
+## Contribution
+
+请在提交 PR 前阅读我们的[贡献指南](./.github/CONTRIBUTING_zh-cn.md)
 
 ## License
 
