@@ -1,4 +1,4 @@
-import smartGesture from '../dist/index.js';
+import smartGesture from '../src/index.js';
 import 'normalize.css';
 import '../src/css/main.scss';
 
@@ -8,6 +8,7 @@ const options = {
   el: document.getElementById('test'),
   enablePath: true,
   timeDelay: 500,
+  triggerMouseKey: 'left',
   onSwipe: (list) => {
     document.getElementById('result0').innerHTML = list.join('');
     console.log(list);

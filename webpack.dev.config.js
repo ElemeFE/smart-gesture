@@ -43,7 +43,7 @@ module.exports = {
 
   resolve: {
     alias: {
-      'smart-gesture/lib/dollarOne': path.join(__dirname, './dist/lib/dollarOne.js')
+      'dollarOne': path.join(__dirname, './src/dollarOne/dollar.js')
     }
   },
 
