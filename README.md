@@ -126,6 +126,14 @@ npm i
 npm run dev
 ```
 
+## Resources
+
+smart-gesture for React: [react-smart-gesture](https://github.com/ElemeFE/react-smart-gesture)
+
+smart-gesture for Vue: [vue-smart-gesture](https://github.com/ElemeFE/vue-smart-gesture)
+
+smart-gesture for ReactNative: [react-native-smart-gesture](https://github.com/ElemeFE/react-native-smart-gesture)
+
 ## Contribution
 
 请在提交 PR 前阅读我们的[贡献指南](./.github/CONTRIBUTING_zh-cn.md)
