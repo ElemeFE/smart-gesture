@@ -7,7 +7,7 @@ let lastPoints = [];
 const options = {
   el: document.getElementById('test'),
   enablePath: true,
-  timeDelay: 500,
+  timeDelay: 100,
   triggerMouseKey: 'left',
   onSwipe: (list) => {
     document.getElementById('result0').innerHTML = list.join('');

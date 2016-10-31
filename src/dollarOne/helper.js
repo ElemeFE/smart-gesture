@@ -34,12 +34,13 @@ const pathLength = (points) => {
 const centroid = (points) => {
   let x = 0.0;
   let y = 0.0;
-  for (let i = 0; i < points.length; i++) {
+  let len = points.length;
+  for (let i = 0; i < len; i++) {
     x += points[i].x;
     y += points[i].y;
   }
-  x /= points.length;
-  y /= points.length;
+  x /= len;
+  y /= len;
   return new Point(x, y);
 };
 
