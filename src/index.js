@@ -207,8 +207,19 @@ class Canvas {
 
   addGesture(ges = {}) {
     const { name, points } = ges;
-    if (!name || !points || !Array.isArray(points)) {
-      console.warn('invalid params. addGesture fail.');
+    const safeName = name.trim();
+    const msgMap = {
+      'EMPTY_NAME':'Invalid Gesture Name. `addGesture` failed.',
+      'EMPTY_POINT':'Invalid Points. `addGesture` failed.'
+    };
+
+    if(!safeName){
+      console.warn(msgMap['EMPTY_NAME']);
+      return false;
+    }
+
+    if (!points || !Array.isArray(points) || !points.length) {
+      console.warn(msgMap['EMPTY_POINT']);
       return false;
     }
 
