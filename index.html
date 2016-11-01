@@ -5,6 +5,10 @@
   <title>Smart Gesture DEMO</title>
 </head>
 <style>
+  .configure {
+    position: relative;
+  }
+  
   .configure,
   .recognize {
     border: 1px solid #ccc;
@@ -52,6 +56,24 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
+  
+  img {
+    width: 100%;
+  }
+  
+  .build-in {
+    position: absolute;
+    width: 400px;
+    right: 250px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .build-in:before {
+    content: '内置图形';
+    position: absolute;
+    margin-top: -1.4em;
+  }
 </style>
 <body>
   <div class="configure">
@@ -78,6 +100,7 @@
       type="text"
       value="rgba(0, 0, 0, .05)"
       onchange="renewGesture()"><span class="option-tip">triggerMouseKey</span></p>
+    <div class="build-in"><img src="./images/demo.png" alt=""></div>
   </div>
   <div class="recognize">
     <div class="add">
