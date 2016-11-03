@@ -86,29 +86,30 @@ class Canvas {
     }
   }
   
-  _calcElOffset(ele) {
-    let t = 0
-      , l = 0;
+  _calcOffsetFromRoot(ele) {
+    let topFromRoot = 0;
+    let leftFromRoot = 0;
     let parent = ele.offsetParent;
-    l += ele.offsetLeft;
-    t += ele.offsetTop;
+    let IS_IE8 = navigator.userAgent.indexOf("MSIE 8") !== -1;
+    leftFromRoot += ele.offsetLeft;
+    topFromRoot += ele.offsetTop;
     while (parent) {
-      l += parent.offsetLeft;
-      t += parent.offsetTop;
-      if (navigator.userAgent.indexOf("MSIE 8") < 0) {
-        l += parent.clientLeft;
-        t += parent.clientTop;
+      leftFromRoot += parent.offsetLeft;
+      topFromRoot += parent.offsetTop;
+      if (!IS_IE8) {
+        leftFromRoot += parent.clientLeft;
+        topFromRoot += parent.clientTop;
       }
       parent = parent.offsetParent;
     }
     return {
-      top: t
-      , left: l
+      top: topFromRoot,
+      left: leftFromRoot
     };
   }
 
   _handleMouseStart() {
-    let offset = this._calcElOffset(this.options.el);
+    let offset = this._calcOffsetFromRoot(this.options.el);
     let pos = {
       x: event.pageX - offset.left,
       y: event.pageY - offset.top,
@@ -117,7 +118,7 @@ class Canvas {
   }
 
   _handleTouchStart() {
-    let offset = this._calcElOffset(this.options.el);
+    let offset = this._calcOffsetFromRoot(this.options.el);
     return {
       x: event.touches[0].pageX - offset.left,
       y: event.touches[0].pageY - offset.top,
@@ -190,9 +191,7 @@ class Canvas {
   _progressSwipe(e) {
     const pageX = this.options.eventType === 'touch' ? e.changedTouches[0].pageX : e.pageX;
     const pageY = this.options.eventType === 'touch' ? e.changedTouches[0].pageY : e.pageY;
-  
-    let offset = this._calcElOffset(this.options.el);
-  
+    let offset = this._calcOffsetFromRoot(this.options.el);
     if (!this.endPos) {
       this.endPos = {
         x: pageX - offset.left,
