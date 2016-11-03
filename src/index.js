@@ -85,18 +85,42 @@ class Canvas {
       keys.forEach((key) => this.addGesture(gestures[key]));
     }
   }
-
-  _handleMouseStart() {
+  
+  _calcElOffset(ele) {
+    let t = 0
+      , l = 0;
+    let parent = ele.offsetParent;
+    l += ele.offsetLeft;
+    t += ele.offsetTop;
+    while (parent) {
+      l += parent.offsetLeft;
+      t += parent.offsetTop;
+      if (navigator.userAgent.indexOf("MSIE 8") < 0) {
+        l += parent.clientLeft;
+        t += parent.clientTop;
+      }
+      parent = parent.offsetParent;
+    }
     return {
-      x: event.pageX - this.options.el.offsetLeft,
-      y: event.pageY - this.options.el.offsetTop,
+      top: t
+      , left: l
     };
   }
 
+  _handleMouseStart() {
+    let offset = this._calcElOffset(this.options.el);
+    let pos = {
+      x: event.pageX - offset.left,
+      y: event.pageY - offset.top,
+    };
+    return pos;
+  }
+
   _handleTouchStart() {
+    let offset = this._calcElOffset(this.options.el);
     return {
-      x: event.touches[0].pageX - this.options.el.offsetLeft,
-      y: event.touches[0].pageY - this.options.el.offsetTop,
+      x: event.touches[0].pageX - offset.left,
+      y: event.touches[0].pageY - offset.top,
     };
   }
 
@@ -166,16 +190,19 @@ class Canvas {
   _progressSwipe(e) {
     const pageX = this.options.eventType === 'touch' ? e.changedTouches[0].pageX : e.pageX;
     const pageY = this.options.eventType === 'touch' ? e.changedTouches[0].pageY : e.pageY;
+  
+    let offset = this._calcElOffset(this.options.el);
+  
     if (!this.endPos) {
       this.endPos = {
-        x: pageX - this.options.el.offsetLeft,
-        y: pageY - this.options.el.offsetTop,
+        x: pageX - offset.left,
+        y: pageY - offset.top,
       };
       return;
     }
 
-    const x = pageX - this.options.el.offsetLeft;
-    const y = pageY - this.options.el.offsetTop;
+    const x = pageX - offset.left;
+    const y = pageY - offset.top;
     const dx = Math.abs(x - this.endPos.x);
     const dy = Math.abs(y - this.endPos.y);
 
