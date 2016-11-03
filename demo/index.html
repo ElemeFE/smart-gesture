@@ -3,12 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>Smart Gesture DEMO</title>
+  <style>
+    #out{
+      /*position: relative;*/
+      /*padding-top:50px;*/
+    }
+    #outer{
+      /*position: relative;*/
+      /*padding-top:100px;*/
+      /*margin-top:100px;*/
+    }
+  </style>
 </head>
 <body>
   <label>添加新手势 </label>
   <input id="gestureName" placeholder="手势名称">
   <button id="btn">ADD</button>
-  <div id="test" style="height: 500px; background: #ddd; position: relative; margin: 10px 50px;"></div>
+  <div id="outer">
+    <div id="out">
+      <div id="test" style="height: 500px; background: #ddd; position: relative; margin: 10px 50px;"></div>
+    </div>
+  </div>
   <h1 id="result" style="font-size: 80px; margin-top: 50px; color: #999; text-align: center"></h1>
   <h1 id="result0" style="font-size: 80px; margin-top: 50px; color: #999; text-align: center"></h1>
 </body>

@@ -85,18 +85,42 @@ class Canvas {
       keys.forEach((key) => this.addGesture(gestures[key]));
     }
   }
+  
+  _calcOffsetFromRoot(ele) {
+    let topFromRoot = 0;
+    let leftFromRoot = 0;
+    let parent = ele.offsetParent;
+    const IS_IE8 = navigator.userAgent.indexOf("MSIE 8") !== -1;
+    leftFromRoot += ele.offsetLeft;
+    topFromRoot += ele.offsetTop;
+    while (parent) {
+      leftFromRoot += parent.offsetLeft;
+      topFromRoot += parent.offsetTop;
+      if (!IS_IE8) {
+        leftFromRoot += parent.clientLeft;
+        topFromRoot += parent.clientTop;
+      }
+      parent = parent.offsetParent;
+    }
+    return {
+      top: topFromRoot,
+      left: leftFromRoot
+    };
+  }
 
   _handleMouseStart() {
+    const offset = this._calcOffsetFromRoot(this.options.el);
     return {
-      x: event.pageX - this.options.el.offsetLeft,
-      y: event.pageY - this.options.el.offsetTop,
+      x: event.pageX - offset.left,
+      y: event.pageY - offset.top,
     };
   }
 
   _handleTouchStart() {
+    const offset = this._calcOffsetFromRoot(this.options.el);
     return {
-      x: event.touches[0].pageX - this.options.el.offsetLeft,
-      y: event.touches[0].pageY - this.options.el.offsetTop,
+      x: event.touches[0].pageX - offset.left,
+      y: event.touches[0].pageY - offset.top,
     };
   }
 
@@ -166,16 +190,17 @@ class Canvas {
   _progressSwipe(e) {
     const pageX = this.options.eventType === 'touch' ? e.changedTouches[0].pageX : e.pageX;
     const pageY = this.options.eventType === 'touch' ? e.changedTouches[0].pageY : e.pageY;
+    const offset = this._calcOffsetFromRoot(this.options.el);
     if (!this.endPos) {
       this.endPos = {
-        x: pageX - this.options.el.offsetLeft,
-        y: pageY - this.options.el.offsetTop,
+        x: pageX - offset.left,
+        y: pageY - offset.top,
       };
       return;
     }
 
-    const x = pageX - this.options.el.offsetLeft;
-    const y = pageY - this.options.el.offsetTop;
+    const x = pageX - offset.left;
+    const y = pageY - offset.top;
     const dx = Math.abs(x - this.endPos.x);
     const dy = Math.abs(y - this.endPos.y);
 
