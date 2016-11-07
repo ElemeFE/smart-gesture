@@ -18,6 +18,8 @@ class Canvas {
       triggerMouseKey: 'right',
       activeColor: 'rgba(0, 0, 0, .05)',
       eventType: 'mouse',
+      position: 'absolute',
+      zIndex: 1,
       ...options,
     };
     this.enable = true;
@@ -62,10 +64,11 @@ class Canvas {
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     this.path.id = svgPathId;
-    this.svg.setAttribute('style', `position: absolute; top: 0; left: 0; background: ${this.options.activeColor}`);
-    this.svg.setAttribute('width', '100%');
-    this.svg.setAttribute('height', '100%');
+    this.svg.setAttribute('style', `position: ${this.options.position}; top: 0; left: 0; background: ${this.options.activeColor}`);
+    this.svg.setAttribute('width', `${this.options.el.offsetWidth}`);
+    this.svg.setAttribute('height', `${this.options.el.offsetHeight}`);
     this.svg.setAttribute('fill', 'none');
+    this.svg.setAttribute('zIndex', `${this.options.zIndex}`);
 
     this.points = [];
     // this.startPos = startPoint;
