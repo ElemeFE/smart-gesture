@@ -224,7 +224,7 @@ class Canvas {
           direction = y < this.endPos.y ? 'U' : 'D';
         }
         const lastDirection = this.directionList.length <= 0 ? '' : this.directionList[this.directionList.length - 1];
-        if (direction != lastDirection) {
+        if (direction !== lastDirection) {
           this.directionList.push(direction);
         }
 
